@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Doro 🦄 | Daily Planner</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(120deg, #ffccf9, #d6b4fc);
+  margin: 0;
+  padding: 0;
+  color: #5a4a63;
+  overflow-x: hidden;
+}
+
+/* General Layout */
+.container, .page {
+  text-align: center;
+  margin-top: 80px;
+}
+.hidden { display: none; }
+
+.logo {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.5em;
+  color: #ff69b4;
+}
+.pink { color: #ff69b4; }
+.subtitle { color: #7c548d; margin-bottom: 20px; }
+
+.card {
+  background: #fff8ff;
+  border-radius: 20px;
+  padding: 20px;
+  display: inline-block;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin: 20px;
+}
+input, select, textarea {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e1c4f0;
+  margin: 5px;
+  font-family: 'Poppins';
+}
+button {
+  background: #ff99cc;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover { background: #ff77b7; }
+
+/* Navigation */
+nav {
+  background: rgba(255,255,255,0.7);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+}
+nav a {
+  text-decoration: none;
+  color: #5a4a63;
+  font-weight: 600;
+  cursor: pointer;
+}
+nav a.active {
+  color: #ff69b4;
+  text-decoration: underline;
+}
+
+/* Study Table */
+.study-table {
+  margin: 20px auto;
+  background: #fff8ff;
+  border-radius: 15px;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.study-table th, .study-table td {
+  padding: 10px;
+}
+
+/* Sparkle + Unicorn */
+.unicorn-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 90px;
+  animation: float 3s ease-in-out infinite;
+  z-index: 100;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.sparkle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+.sparkle span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #fff 40%, transparent 70%);
+  border-radius: 50%;
+  animation: sparkleMove 10s linear infinite;
+  opacity: 0.8;
+}
+@keyframes sparkleMove {
+  0% { transform: translateY(0) scale(0); opacity: 0.8; }
+  50% { opacity: 1; transform: translateY(-50vh) scale(1.2); }
+  100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+<!-- Welcome Page -->
+<div class="container" id="welcomePage">
+  <h1 class="logo">🦄 <span class="pink">Doro</span></h1>
+  <p class="subtitle">Your Magical Daily Planner ✨</p>
+  <div class="card">
+    <label>Enter Your Name 💖</label><br>
+    <input type="text" id="username" placeholder="Type your name..." />
+    <button onclick="startJourney()">Start My Journey 🌈</button>
+  </div>
+</div>
+
+<!-- Main Planner Pages -->
+<div id="mainContent" class="hidden">
+  <nav>
+    <h2 class="logo">🌸 Doro</h2>
+    <ul>
+      <li><a class="tabLink active" onclick="showPage('routinePage')">Daily Routine</a></li>
+      <li><a class="tabLink" onclick="showPage('skincarePage')">Skincare</a></li>
+      <li><a class="tabLink" onclick="showPage('studyPage')">Study Log</a></li>
+    </ul>
+  </nav>
+
+  <!-- Routine Page -->
+  <div id="routinePage" class="page">
+    <h1>🌅 Daily Routine Planner</h1>
+    <p>Plan your magical day, <span id="user-name"></span> ✨</p>
+    <div id="routine-list"></div>
+    <div class="card">
+      <input type="text" id="task" placeholder="Add routine item (e.g., Wake up 🕒)" />
+      <input type="time" id="time" />
+      <button onclick="addRoutine()">Add 💫</button>
+    </div>
+  </div>
+
+  <!-- Skincare Page -->
+  <div id="skincarePage" class="page hidden">
+    <h1>💆 Skincare Routine</h1>
+    <p>Add your remedies and track weekly progress 🌷</p>
+    <div id="remedies"></div>
+    <div class="card">
+      <input type="text" id="remedy" placeholder="e.g., Aloe mask 🌿" />
+      <select id="day">
+        <option value="">Choose Day</option>
+        <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+        <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+      </select>
+      <button onclick="addRemedy()">Add 🌸</button>
+    </div>
+  </div>
+
+  <!-- Study Log Page -->
+  <div id="studyPage" class="page hidden">
+    <h1>📖 Study Log</h1>
+    <p>Track your 6 subjects and skill learning 🌈</p>
+    <table class="study-table">
+      <tr><th>Subject</th><th>Syllabus</th><th>Progress (%)</th></tr>
+      <tr><td>Subject 1</td><td><input type="text"></td><td><input type="number" min="0" max="100"></td></tr>
+      <tr><td>Subject 2</td><td><input type="text"></td><td><input type="number" min="0" max="100"></td></tr>
+      <tr><td>Subject 3</td><td><input type="text"></td><td><input type="number" min="0" max="100"></td></tr>
+      <tr><td>Subject 4</td><td><input type="text"></td><td><input type="number" min="0" max="100"></td></tr>
+      <tr><td>Subject 5</td><td><input type="text"></td><td><input type="number" min="0" max="100"></td></tr>
+      <tr><td>Subject 6</td><td><input type="text"></td><td><input type="number" min="0" max="100"></td></tr>
+    </table>
+    <div class="card">
+      <h3>💡 Skill Learning Log</h3>
+      <textarea placeholder="Write what you learned today..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- Sparkles & Unicorn -->
+<div class="sparkle" id="sparkles"></div>
+<img src="https://cdn-icons-png.flaticon.com/512/7432/7432168.png" class="unicorn-float" alt="Unicorn" />
+
+<script>
+function startJourney() {
+  const name = document.getElementById('username').value.trim();
+  if (name) {
+    localStorage.setItem('username', name);
+    document.getElementById('welcomePage').classList.add('hidden');
+    document.getElementById('mainContent').classList.remove('hidden');
+    document.getElementById('user-name').textContent = name;
+  } else {
+    alert('Please enter your name 🦄');
+  }
+}
+
+// Navigation
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+  document.getElementById(pageId).classList.remove('hidden');
+  document.querySelectorAll('.tabLink').forEach(l => l.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Add Routine
+function addRoutine() {
+  const task = document.getElementById("task").value;
+  const time = document.getElementById("time").value;
+  if (task && time) {
+    const div = document.createElement("div");
+    div.classList.add("routine-item");
+    div.innerHTML = `<b>${task}</b> at ${time} <button onclick="this.parentElement.remove()">❌</button>`;
+    document.getElementById("routine-list").appendChild(div);
+    document.getElementById("task").value = "";
+    document.getElementById("time").value = "";
+  }
+}
+
+// Add Skincare Remedy
+function addRemedy() {
+  const remedy = document.getElementById("remedy").value;
+  const day = document.getElementById("day").value;
+  if (remedy && day) {
+    const div = document.createElement("div");
+    div.classList.add("routine-item");
+    div.innerHTML = `<b>${day}:</b> ${remedy} 💖 <button onclick="this.parentElement.remove()">❌</button>`;
+    document.getElementById("remedies").appendChild(div);
+    document.getElementById("remedy").value = "";
+    document.getElementById("day").value = "";
+  }
+}
+
+// Sparkle Animation
+const sparkleContainer = document.getElementById("sparkles");
+for (let i = 0; i < 30; i++) {
+  const s = document.createElement("span");
+  s.style.left = Math.random() * 100 + "%";
+  s.style.animationDelay = Math.random() * 10 + "s";
+  s.style.animationDuration = 8 + Math.random() * 4 + "s";
+  sparkleContainer.appendChild(s);
+}
+</script>
+</body>
+</html>
